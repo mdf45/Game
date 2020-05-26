@@ -5,8 +5,7 @@ using UnityEngine;
 public class Move : MonoBehaviour
 {
     public float speed = 2;
-
-    public GameObject gm;
+    private float _speed;
 
     public bool isDead = false;
 
@@ -35,17 +34,31 @@ public class Move : MonoBehaviour
                 move();
         }
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            isDead = true;
-            Searched = false;
+            _speed = speed;
+            speed = 0;
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            //isDead = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            SearchEnemy();
+            speed = _speed;
         }
     }
 
-    void SearchEnemy()
+    public void SearchEnemy()
     {
         Transform nearestEnemy = null;
         float nearestEnemyDistance = Mathf.Infinity;
@@ -56,6 +69,8 @@ public class Move : MonoBehaviour
 
             if (currDistance < nearestEnemyDistance)
             {
+                GetComponent<HeroAttackScript>().obj = enemy;
+                GetComponent<HeroAttackScript>().isObj = true;
                 nearestEnemy = enemy.transform;
                 nearestEnemyDistance = currDistance;
             }

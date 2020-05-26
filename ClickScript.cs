@@ -6,6 +6,8 @@ public class ClickScript : MonoBehaviour
 {
     public GameObject g;
     public GameObject image;
+
+    public static bool canClick = true;
     void Start()
     {
         //image.SetActive(false);
@@ -13,14 +15,13 @@ public class ClickScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && MainScript.Warriors > 0 && canClick)
         {
             Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             pos.z = 3;
             /*if (pos.y < -2)
             {
                 Instantiate(g, pos, transform.rotation);
-                // Debug.Log(pos);
             }
             else
             {
@@ -28,7 +29,8 @@ public class ClickScript : MonoBehaviour
                 StartCoroutine(Wait(1.5f));
             }*/
             Instantiate(g, pos, transform.rotation);
-            Debug.Log(pos);
+            MainScript.Warriors -= 1;
+            //Debug.LogWarning(pos);
         }
     }
 
